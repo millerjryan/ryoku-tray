@@ -81,7 +81,11 @@ Item {
         }
 
         // The collapse/expand mark. Always present (even with zero pinned
-        // icons) so a tray with nothing pinned is still reachable.
+        // icons) so a tray with nothing pinned is still reachable. The bar
+        // is a fixed-height layer-shell surface, so a popup/tooltip hanging
+        // outside this item's bounds would just be clipped by the window
+        // itself; instead the glyph grows in place on hover to show the
+        // collapsed count inline, which the host already re-measures live.
         Item {
             id: chevronSlot
             width: chevron.implicitWidth + 4 * root.s
@@ -94,7 +98,12 @@ Item {
                 anchors.centerIn: parent
                 // Plain ASCII caret: reliable across fonts, unlike dingbat
                 // triangle codepoints that some fonts substitute oddly.
-                text: root.active ? "^" : "v"
+                text: {
+                    const mark = root.active ? "^" : "v";
+                    return chevronSlot.hovered && !root.active
+                        ? mark + " " + root.collapsedCount
+                        : mark;
+                }
                 color: root.liveCount > 0 ? (root.active ? Theme.accent : Theme.bright) : Theme.dim
                 font.family: Theme.font
                 font.bold: true
@@ -107,38 +116,6 @@ Item {
                 onEntered: chevronSlot.hovered = true
                 onExited: chevronSlot.hovered = false
                 onClicked: if (root.pluginApi) root.pluginApi.togglePanel()
-            }
-
-            // A small hover tooltip reporting how many apps are tucked away
-            // behind the chevron (everything not pinned inline). Anchored
-            // below the chevron itself; the plugin's host slot doesn't clip,
-            // so this is free to hang below the bar.
-            Rectangle {
-                id: tooltip
-                visible: chevronSlot.hovered && !root.active
-                anchors.top: parent.bottom
-                anchors.right: parent.right
-                anchors.topMargin: 4 * root.s
-                z: 100
-                width: tooltipText.implicitWidth + 12 * root.s
-                height: tooltipText.implicitHeight + 8 * root.s
-                radius: 4 * root.s
-                color: Theme.cardTop
-                border.color: Theme.border
-                border.width: 1
-
-                Text {
-                    id: tooltipText
-                    anchors.centerIn: parent
-                    text: root.collapsedCount === 0
-                        ? "No collapsed apps"
-                        : root.collapsedCount === 1
-                            ? "1 app in tray"
-                            : root.collapsedCount + " apps in tray"
-                    color: Theme.bright
-                    font.family: Theme.font
-                    font.pixelSize: 11 * root.s
-                }
             }
         }
     }
