@@ -1,0 +1,45 @@
+{
+  "id": "tray",
+  "name": "Tray",
+  "version": "0.1.0",
+  "author": "Josh \u003cjosh@example.com\u003e",
+  "description": "Tray is a Ryoku shell plugin.",
+  "license": "MIT",
+  "official": false,
+  "hosts": [
+    "topbarGlyph"
+  ],
+  "entryPoints": {
+    "main": "service/Main.qml",
+    "content": "content/Widget.qml",
+    "panel": "content/Panel.qml"
+  },
+  "panel": {
+    "width": 320
+  },
+  "files": [],
+  "capabilities": {
+    "densities": [
+      "glyph",
+      "compact"
+    ]
+  },
+  "defaults": {
+    "host": "topbarGlyph",
+    "label": "Tray"
+  },
+  "dependencies": {
+    "commands": []
+  },
+  "metadata": {
+    "settings": [
+      {
+        "key": "showCount",
+        "type": "toggle",
+        "label": "Show the tick count",
+        "group": "Tray",
+        "default": true
+      }
+    ]
+  }
+}
