@@ -2,8 +2,8 @@
   "id": "tray",
   "name": "Tray",
   "version": "0.1.0",
-  "author": "Josh \u003cjosh@example.com\u003e",
-  "description": "Tray is a Ryoku shell plugin.",
+  "author": "Josh <josh@example.com>",
+  "description": "A collapsible system tray: pinned apps always show on the bar, the rest live behind a toggle.",
   "license": "MIT",
   "official": false,
   "hosts": [
@@ -34,11 +34,20 @@
   "metadata": {
     "settings": [
       {
-        "key": "showCount",
-        "type": "toggle",
-        "label": "Show the tick count",
+        "key": "pinnedIds",
+        "type": "text",
+        "label": "Pinned tray icons (managed by the pin buttons in the panel; JSON id list)",
         "group": "Tray",
-        "default": true
+        "default": "[]"
+      },
+      {
+        "key": "maxPinned",
+        "type": "int",
+        "label": "Max pinned icons shown on the bar",
+        "group": "Tray",
+        "default": 6,
+        "min": 1,
+        "max": 12
       }
     ]
   }
